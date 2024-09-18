@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="grafica.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" id="text">
+    <input type="submit" id="cerca" value="Cerca">
+
+    <div id="dinamico"></div>
+
+    <script>
+        let url = "./json_magazzino.json";
+
+        let codice = document.getElementById("text");
+        let cerca = document.getElementById("cerca");
+        let div_messaggi = document.getElementById("dinamico");
+
+        fetch(url)
+            .then(response => response.json()) //richiamo la funzione json
+            .then(dati => {
+                const datiJson = dati
+                console.log(datiJson)
+            })
+
+        cerca.addEventListener("click", function (e) {
+            e.defaultPrevented;
+            fetch(url)
+                .then(response => response.json()) //richiamo la funzione json
+                .then(dati => {
+                    const datiJson = dati
+                    datiJson.forEach(element => {
+                        if (codice.value == element.codiceProd) {
+                            createCard(element)
+                        } else if (codice.value == element.reparto) {
+                            console.log(element)
+                            createCard(element)
+                        } else if (codice.value == element.tipoprodotto) {
+                            console.log(element)
+                            createCard(element)
+                        } else if (codice.value == element.modelloNome) {
+                            console.log(element)
+                            createCard(element)
+                        } else if (codice.value == element.marca) {
+                            console.log(element)
+                            createCard(element)
+                        }
+                    });
+                })
+        })
+
+
+        function createCard(element) {
+            let div = document.createElement('div');
+            div.classList.add('card');
+
+            div.innerHTML = `
+                    <div class="card-container">
+                        <b> Codice prodotto:</b> ${element.codiceProd}
+                        <b> Reparto prodotto:</b> ${element.reparto}
+                        <input type="submit" id="modifica" value="Modifica">
+                        <input type="submit" id="rimuovi" value="Rimuovi">
+                    </div>`;
+
+
+            div_messaggi.appendChild(div);
+
+            modifica = document.getElementById("modifica");
+            elimina = document.getElementById("rimuovi");
+
+            modifica.addEventListener("click", function (e) {
+                e.defaultPrevented;
+
+                console.log("modificato");
+            })
+
+            elimina.addEventListener("click", function (e) {
+                e.defaultPrevented;
+
+                console.log("eliminato");
+            })
+
+        }
+    </script>
+</body>
+
+</html>
