@@ -13,27 +13,7 @@
     <input type="text" id="text">
     <input type="submit" id="cerca" value="Cerca">
 
-    <div id="dinamico">
-        <table id="dati">
-            <tr>
-                <th>Codice</th>
-                <th>Reparto</th>
-                <th>Tipo Prodotto</th>
-                <th>Marca</th>
-                <th>Modello Nome</th>
-                <th>Quantità</th>
-                <th>Prezzo</th>
-                <th>Nominativo Responsabile</th>
-                <th>Cellulare Responsabile</th>
-                <th>Fornitore1</th>
-                <th>Costo1</th>
-                <th>Fornitore2</th>
-                <th>Costo2</th>
-                <th>IVA</th>
-                <th>Azioni</th>
-            </tr>
-        </table>
-    </div>
+    <div id="dinamico"></div>
 
     <script>
         let url = "./json_magazzino.json";
@@ -41,7 +21,6 @@
         let codice = document.getElementById("text");
         let cerca = document.getElementById("cerca");
         let div_messaggi = document.getElementById("dinamico");
-        let tabella = document.getElementById("dati");
 
         fetch(url)
             .then(response => response.json()) //richiamo la funzione json
@@ -49,20 +28,47 @@
                 const datiJson = dati
                 console.log(datiJson)
             })
-        
+
         cerca.addEventListener("click", function (e) {
             e.defaultPrevented;
+
+            div_messaggi.innerHTML = ""
+
+            if (codice.value != "") {
+                div_messaggi.innerHTML =
+                    `<table id="dati">
+                        <tr>
+                            <th>Codice</th>
+                            <th>Reparto</th>
+                            <th>Tipo Prodotto</th>
+                            <th>Marca</th>
+                            <th>Modello Nome</th>
+                            <th>Quantità</th>
+                            <th>Prezzo</th>
+                            <th>Nominativo Responsabile</th>
+                            <th>Cellulare Responsabile</th>
+                            <th>Fornitore1</th>
+                            <th>Costo1</th>
+                            <th>Fornitore2</th>
+                            <th>Costo2</th>
+                            <th>IVA</th>
+                            <th>Azioni</th>
+                        </tr>
+                    </table>`
+            }
+
             fetch(url)
                 .then(response => response.json()) //richiamo la funzione json
                 .then(dati => {
                     const datiJson = dati
                     datiJson.forEach(element => {
+                        let contatore = 0;
                         if (codice.value == element.codiceProd) {
-                            createCard(element)
+                            createCard(element, contatore)
                         } else if (codice.value == element.reparto) {
-                            console.log(element)
+                            console.log(element, contatore)
                             createCard(element)
-                        } else if (codice.value == element.tipoprodotto) {
+                        } else if (codice.value == element.tipoProdotto) {
                             console.log(element)
                             createCard(element)
                         } else if (codice.value == element.modelloNome) {
@@ -76,7 +82,8 @@
                 })
         })
 
-        function createCard(element) {
+        function createCard(element, contatore) {
+            let tabella = document.getElementById("dati");
 
             tabella.innerHTML += `
                             <tr>
@@ -87,33 +94,41 @@
                                 <td>${element.modelloNome}</td>
                                 <td>${element.qt}</td>
                                 <td>${element.prezzo}</td>
-                                <td>${element.Nominativo_responsabile}</td>
-                                <td>${element.cell_resp}</td>
+                                <td>${element.nominativoResponsabile}</td>
+                                <td>${element.cellResp}</td>
                                 <td>${element.fornitore1}</td>
                                 <td>${element.costo1}</td>
                                 <td>${element.fornitore2}</td>
                                 <td>${element.costo2}</td>
-                                <td>${element.IVA}</td>
-                                <td><input type="submit" id="rimuovi" value="Rimuovi">
-                                    <input type="submit" id="modifica" value="Modifica">
+                                <td>${element.iva}</td>
+                                <td><input type="submit" id="rimuovi${contatore}" value="Rimuovi">
+                                    <input type="submit" id="modifica${contatore}" value="Modifica">
                                 </td>
                             </tr>                
                     </div>`;
 
-            modifica = document.getElementById("modifica");
-            elimina = document.getElementById("rimuovi");
+            let modifica = [];
+            let elimina = [];
 
-            modifica.addEventListener("click", function (e) {
-                e.defaultPrevented;
+            modifica.push(document.getElementById(`modifica${contatore}`));
+            elimina.push(document.getElementById(`rimuovi${contatore}`));
 
-                console.log("modificato");
+            modifica.forEach(elemento => {
+                elemento.addEventListener("click", function (e) {
+                    e.defaultPrevented;
+
+                    console.log("modificato");
+                })
             })
 
-            elimina.addEventListener("click", function (e) {
-                e.defaultPrevented;
+            elimina.forEach(elemento => {
+                elemento.addEventListener("click", function (e) {
+                    e.defaultPrevented;
 
-                console.log("eliminato");
+                    console.log("eliminato");
+                })
             })
+
         }
     </script>
 </body>
