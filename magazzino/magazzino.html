@@ -13,7 +13,27 @@
     <input type="text" id="text">
     <input type="submit" id="cerca" value="Cerca">
 
-    <div id="dinamico"></div>
+    <div id="dinamico">
+        <table id="dati">
+            <tr>
+                <th>Codice</th>
+                <th>Reparto</th>
+                <th>Tipo Prodotto</th>
+                <th>Marca</th>
+                <th>Modello Nome</th>
+                <th>Quantità</th>
+                <th>Prezzo</th>
+                <th>Nominativo Responsabile</th>
+                <th>Cellulare Responsabile</th>
+                <th>Fornitore1</th>
+                <th>Costo1</th>
+                <th>Fornitore2</th>
+                <th>Costo2</th>
+                <th>IVA</th>
+                <th>Azioni</th>
+            </tr>
+        </table>
+    </div>
 
     <script>
         let url = "./json_magazzino.json";
@@ -21,6 +41,7 @@
         let codice = document.getElementById("text");
         let cerca = document.getElementById("cerca");
         let div_messaggi = document.getElementById("dinamico");
+        let tabella = document.getElementById("dati");
 
         fetch(url)
             .then(response => response.json()) //richiamo la funzione json
@@ -28,7 +49,7 @@
                 const datiJson = dati
                 console.log(datiJson)
             })
-
+        
         cerca.addEventListener("click", function (e) {
             e.defaultPrevented;
             fetch(url)
@@ -55,21 +76,29 @@
                 })
         })
 
-
         function createCard(element) {
-            let div = document.createElement('div');
-            div.classList.add('card');
 
-            div.innerHTML = `
-                    <div class="card-container">
-                        <b> Codice prodotto:</b> ${element.codiceProd}
-                        <b> Reparto prodotto:</b> ${element.reparto}
-                        <input type="submit" id="modifica" value="Modifica">
-                        <input type="submit" id="rimuovi" value="Rimuovi">
+            tabella.innerHTML += `
+                            <tr>
+                                <td>${element.codiceProd}</td>
+                                <td>${element.reparto}</td>
+                                <td>${element.tipoProdotto}</td>
+                                <td>${element.marca}</td>
+                                <td>${element.modelloNome}</td>
+                                <td>${element.qt}</td>
+                                <td>${element.prezzo}</td>
+                                <td>${element.Nominativo_responsabile}</td>
+                                <td>${element.cell_resp}</td>
+                                <td>${element.fornitore1}</td>
+                                <td>${element.costo1}</td>
+                                <td>${element.fornitore2}</td>
+                                <td>${element.costo2}</td>
+                                <td>${element.IVA}</td>
+                                <td><input type="submit" id="rimuovi" value="Rimuovi">
+                                    <input type="submit" id="modifica" value="Modifica">
+                                </td>
+                            </tr>                
                     </div>`;
-
-
-            div_messaggi.appendChild(div);
 
             modifica = document.getElementById("modifica");
             elimina = document.getElementById("rimuovi");
@@ -85,7 +114,6 @@
 
                 console.log("eliminato");
             })
-
         }
     </script>
 </body>
