@@ -16,7 +16,7 @@
     <div id="dinamico"></div>
 
     <script>
-        let url = "./json_magazzino.json";
+        let url = "./magazzinoJson.json";
 
         let codice = document.getElementById("text");
         let cerca = document.getElementById("cerca");
@@ -67,33 +67,32 @@
                 .then(response => response.json()) //richiamo la funzione json
                 .then(dati => {
                     const datiJson = dati
-                    let contatore = 0;
                     datiJson.forEach(element => {
                         if (codice.value == element.codiceProd) {
-                            createCard(element, contatore)
-                            contatore += 1
+                            createRowTable(element)
+                            
                         } else if (codice.value == element.reparto) {
-                            //console.log(element, contatore)
-                            createCard(element, contatore)
-                            contatore += 1
+                            //console.log(element)
+                            createRowTable(element)
+                            
                         } else if (codice.value == element.tipoProdotto) {
                             //console.log(element)
-                            createCard(element, contatore)
-                            contatore += 1
+                            createRowTable(element)
+                            
                         } else if (codice.value == element.modelloNome) {
                             //console.log(element)
-                            createCard(element, contatore)
-                            contatore += 1
+                            createRowTable(element)
+                            
                         } else if (codice.value == element.marca) {
                             //console.log(element)
-                            createCard(element, contatore)
-                            contatore += 1
+                            createRowTable(element)
+
                         }
                     });
                 })
         })
 
-        function createCard(element, contatore) {
+        function createRowTable(element) {
             let tabella = document.getElementById("dati");
             let riga = tabella.insertRow();
 
