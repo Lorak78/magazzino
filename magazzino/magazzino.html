@@ -22,18 +22,24 @@
         let cerca = document.getElementById("cerca");
         let div_messaggi = document.getElementById("dinamico");
 
-        fetch(url)
+        let modifica = [];
+        let rimuovi = [];
+
+        console.log(modifica)
+
+        /*fetch(url)
             .then(response => response.json()) //richiamo la funzione json
             .then(dati => {
                 const datiJson = dati
                 console.log(datiJson)
             })
-
+        */
         cerca.addEventListener("click", function (e) {
             e.defaultPrevented;
 
             div_messaggi.innerHTML = ""
-
+            modifica = []
+            rimuovi = []
             if (codice.value != "") {
                 div_messaggi.innerHTML =
                     `<table id="dati">
@@ -61,22 +67,27 @@
                 .then(response => response.json()) //richiamo la funzione json
                 .then(dati => {
                     const datiJson = dati
+                    let contatore = 0;
                     datiJson.forEach(element => {
-                        let contatore = 0;
                         if (codice.value == element.codiceProd) {
                             createCard(element, contatore)
+                            contatore += 1
                         } else if (codice.value == element.reparto) {
-                            console.log(element, contatore)
-                            createCard(element)
+                            //console.log(element, contatore)
+                            createCard(element, contatore)
+                            contatore += 1
                         } else if (codice.value == element.tipoProdotto) {
-                            console.log(element)
-                            createCard(element)
+                            //console.log(element)
+                            createCard(element, contatore)
+                            contatore += 1
                         } else if (codice.value == element.modelloNome) {
-                            console.log(element)
-                            createCard(element)
+                            //console.log(element)
+                            createCard(element, contatore)
+                            contatore += 1
                         } else if (codice.value == element.marca) {
-                            console.log(element)
-                            createCard(element)
+                            //console.log(element)
+                            createCard(element, contatore)
+                            contatore += 1
                         }
                     });
                 })
@@ -84,51 +95,41 @@
 
         function createCard(element, contatore) {
             let tabella = document.getElementById("dati");
+            let riga = tabella.insertRow();
 
-            tabella.innerHTML += `
-                            <tr>
-                                <td>${element.codiceProd}</td>
-                                <td>${element.reparto}</td>
-                                <td>${element.tipoProdotto}</td>
-                                <td>${element.marca}</td>
-                                <td>${element.modelloNome}</td>
-                                <td>${element.qt}</td>
-                                <td>${element.prezzo}</td>
-                                <td>${element.nominativoResponsabile}</td>
-                                <td>${element.cellResp}</td>
-                                <td>${element.fornitore1}</td>
-                                <td>${element.costo1}</td>
-                                <td>${element.fornitore2}</td>
-                                <td>${element.costo2}</td>
-                                <td>${element.iva}</td>
-                                <td><input type="submit" id="rimuovi${contatore}" value="Rimuovi">
-                                    <input type="submit" id="modifica${contatore}" value="Modifica">
-                                </td>
-                            </tr>                
-                    </div>`;
+            // Inserisci le celle nella riga
+            riga.insertCell(0).innerHTML = element.codiceProd;
+            riga.insertCell(1).innerHTML = element.reparto;
+            riga.insertCell(2).innerHTML = element.tipoProdotto;
+            riga.insertCell(3).innerHTML = element.marca;
+            riga.insertCell(4).innerHTML = element.modelloNome;
+            riga.insertCell(5).innerHTML = element.qt;
+            riga.insertCell(6).innerHTML = element.prezzo;
+            riga.insertCell(7).innerHTML = element.nominativoResponsabile;
+            riga.insertCell(8).innerHTML = element.cellResp;
+            riga.insertCell(9).innerHTML = element.fornitore1;
+            riga.insertCell(10).innerHTML = element.costo1;
+            riga.insertCell(11).innerHTML = element.fornitore2;
+            riga.insertCell(12).innerHTML = element.costo2;
+            riga.insertCell(13).innerHTML = element.iva;
 
-            let modifica = [];
-            let elimina = [];
+            let cellAzioni = riga.insertCell(14);
 
-            modifica.push(document.getElementById(`modifica${contatore}`));
-            elimina.push(document.getElementById(`rimuovi${contatore}`));
+            const elimina = document.createElement('button');
+            elimina.textContent = `elimina`;
+            const modifica = document.createElement('button');
+            modifica.textContent = `modifica`;
 
-            modifica.forEach(elemento => {
-                elemento.addEventListener("click", function (e) {
-                    e.defaultPrevented;
+            cellAzioni.appendChild(modifica);
+            cellAzioni.appendChild(elimina);
 
-                    console.log("modificato");
-                })
-            })
+            modifica.addEventListener("click", () => {
+                alert("modifica: " + element.codiceProd);
+            });
 
-            elimina.forEach(elemento => {
-                elemento.addEventListener("click", function (e) {
-                    e.defaultPrevented;
-
-                    console.log("eliminato");
-                })
-            })
-
+            elimina.addEventListener("click", () => {
+                alert("elimina: " + element.codiceProd);
+            });
         }
     </script>
 </body>

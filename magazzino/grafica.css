@@ -38,3 +38,18 @@ input {
     border-radius: 4px;
     transition: background-color 0.3s ease;
 }
+
+button{
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
