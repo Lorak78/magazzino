@@ -12,6 +12,7 @@
 <body>
     <input type="text" id="text">
     <input type="submit" id="cerca" value="Cerca">
+    <button id="subTotale">subTotale</button>
 
     <div id="dinamico"></div>
 
@@ -20,20 +21,17 @@
 
         let codice = document.getElementById("text");
         let cerca = document.getElementById("cerca");
+        let subTotale = document.getElementById("subTotale");
         let div_messaggi = document.getElementById("dinamico");
 
-        let modifica = [];
-        let rimuovi = [];
+        let datiJson
 
-        console.log(modifica)
-
-        /*fetch(url)
+        fetch(url)
             .then(response => response.json()) //richiamo la funzione json
             .then(dati => {
-                const datiJson = dati
-                console.log(datiJson)
+                datiJson = dati
             })
-        */
+
         cerca.addEventListener("click", function (e) {
             e.defaultPrevented;
 
@@ -63,36 +61,36 @@
                     </table>`
             }
 
-            fetch(url)
-                .then(response => response.json()) //richiamo la funzione json
-                .then(dati => {
-                    const datiJson = dati
-                    datiJson.forEach(element => {
-                        if (codice.value == element.codiceProd) {
-                            createRowTable(element)
-                            
-                        } else if (codice.value == element.reparto) {
-                            //console.log(element)
-                            createRowTable(element)
-                            
-                        } else if (codice.value == element.tipoProdotto) {
-                            //console.log(element)
-                            createRowTable(element)
-                            
-                        } else if (codice.value == element.modelloNome) {
-                            //console.log(element)
-                            createRowTable(element)
-                            
-                        } else if (codice.value == element.marca) {
-                            //console.log(element)
-                            createRowTable(element)
+            datiJson.forEach(element => {
+                if (codice.value == element.codiceProd) {
+                    createRowTable(element)
 
-                        }
-                    });
-                })
+                } else if (codice.value == element.reparto) {
+                    //console.log(element)
+                    createRowTable(element)
+
+                } else if (codice.value == element.tipoProdotto) {
+                    //console.log(element)
+                    createRowTable(element)
+
+                } else if (codice.value == element.modelloNome) {
+                    //console.log(element)
+                    createRowTable(element)
+
+                } else if (codice.value == element.marca) {
+                    //console.log(element)
+                    createRowTable(element)
+
+                }
+            });
         })
 
+        subTotale.addEventListener("click", () => {
+            alert("ciao");
+        });
+
         function createRowTable(element) {
+            let ricerca = codice.value
             let tabella = document.getElementById("dati");
             let riga = tabella.insertRow();
 
@@ -116,6 +114,7 @@
 
             const elimina = document.createElement('button');
             elimina.textContent = `elimina`;
+
             const modifica = document.createElement('button');
             modifica.textContent = `modifica`;
 
@@ -123,11 +122,18 @@
             cellAzioni.appendChild(elimina);
 
             modifica.addEventListener("click", () => {
+                let conferma = confirm("Vuoi confermare la modifica dell'elemento?")
                 alert("modifica: " + element.codiceProd);
             });
 
             elimina.addEventListener("click", () => {
-                alert("elimina: " + element.codiceProd);
+                let conferma = confirm("Vuoi confermare la rimozione dell'elemento?")
+                if(conferma){
+                    datiJson.splice(datiJson.findIndex(el => el.codiceProd === element.codiceProd), 1)
+                    alert(element.codiceProd + ": eliminato");
+                    codice.value = ricerca
+                    cerca.click();
+                }
             });
         }
     </script>
