@@ -86,7 +86,34 @@
         })
 
         subTotale.addEventListener("click", () => {
-            alert("ciao");
+            let lista_subTotali = []
+
+            div_messaggi.innerHTML = ""
+
+            datiJson.forEach(element => {
+                let esiste = lista_subTotali.some(function (obj) {
+                    return obj.reparto === element.reparto
+                })
+
+                if (esiste) {
+                    lista_subTotali.forEach(el_reparto => {
+                        if (el_reparto.reparto == element.reparto) {
+                            el_reparto.pz_tot += element.qt
+                            el_reparto.val_tot += element.qt * element.prezzo
+                        }
+                    })
+                } else {
+                    let oggetto = { reparto: element.reparto, pz_tot: element.qt, val_tot: (element.qt * element.prezzo) }
+                    lista_subTotali.push(oggetto)
+                }
+
+            })
+
+            lista_subTotali.forEach(el_reparto => {
+                div_messaggi.innerHTML += `<b>Reparto:</b> ${el_reparto.reparto} <b>Totale Pezzi:</b> ${el_reparto.pz_tot} <b>Valora Totale:</b> ${el_reparto.val_tot}<br><br>`
+            })
+
+            console.log(lista_subTotali)
         });
 
         function createRowTable(element) {
@@ -128,7 +155,7 @@
 
             elimina.addEventListener("click", () => {
                 let conferma = confirm("Vuoi confermare la rimozione dell'elemento?")
-                if(conferma){
+                if (conferma) {
                     datiJson.splice(datiJson.findIndex(el => el.codiceProd === element.codiceProd), 1)
                     alert(element.codiceProd + ": eliminato");
                     codice.value = ricerca
