@@ -15,27 +15,178 @@
     <button id="subTotale">subTotale</button>
 
     <div id="dinamico"></div>
+    <input type="submit" id="aggiungi" value="Aggiungi Prodotto">
+    <input type="submit" id="aggiungiReparto" value="Aggiungi Reparto">
+    <div id="campi"></div>
 
     <script>
         let url = "./magazzinoJson.json";
 
         let codice = document.getElementById("text");
         let cerca = document.getElementById("cerca");
+        let aggiungi = document.getElementById("aggiungi");
+        let aggiungiReparto = document.getElementById("aggiungiReparto")
         let subTotale = document.getElementById("subTotale");
         let div_messaggi = document.getElementById("dinamico");
 
         let datiJson
+        let reparti = document.getElementById("reparti")
+        let campi = document.getElementById("campi")
+        let lista_reparti = []
 
         fetch(url)
-            .then(response => response.json()) //richiamo la funzione json
+            .then(response => response.json())
             .then(dati => {
                 datiJson = dati
+                console.log(datiJson)
+                carica_reparti(lista_reparti, datiJson)
             })
+
+        console.log(lista_reparti)
+
+        aggiungiReparto.addEventListener("click", function(e){
+            e.preventDefault();
+            div_messaggi.innerHTML = "";
+
+            campi.innerHTML = `<div>Nuovo Reparto <input type=\"text\" id=\"nome_reparto\"></div>
+            <input type=\"submit\" id=\"conferma\" value=\"Conferma aggiunta\">`;
+            let nome_reparto = document.getElementById("nome_reparto");
+            let conferma = document.getElementById("conferma");
+
+            conferma.addEventListener("click", function (e) {
+                e.preventDefault();
+                let esistente = false
+                lista_reparti.forEach(el =>{
+                    if(el === nome_reparto.value){
+                        alert("reparto già esistente")
+                        esistente = true
+                    }
+                })
+
+                if(!esistente){
+                    lista_reparti.push(nome_reparto.value)
+                }
+
+                console.log(lista_reparti)
+            })
+        })
+
+        aggiungi.addEventListener("click", function (e) {
+            e.preventDefault()
+            div_messaggi.innerHTML = "";
+
+            campi.innerHTML = `<div>Codice <input type=\"text\" id=\"codice\"></div>\
+            <div>Reparto <select id="reparto"></select></div>\
+            <div>Tipo prodotto <input type=\"text\" id=\"tipoProdotto\"></div>\
+            <div>Marca <input type=\"text\" id=\"marca\"></div>\
+            <div>Modello <input type=\"text\" id=\"modello\"></div>\
+            <div>Quantità <input type=\"text\" id=\"qt\"></div>\
+            <div>Prezzo <input type=\"text\" id=\"prezzo\"></div>\
+            <div>Nominativo responsabile <input type=\"text\" id=\"nominativoResp\"></div>\
+            <div>Cellulare responsabile <input type=\"text\" id=\"cellResp\"></div>\
+            <div>Fornitore 1 <input type=\"text\" id=\"fornitore1\"></div>\
+            <div>Costo 1  <input type=\"text\" id=\"costo1\"></div>\
+            <div>Fornitore 2 <input type=\"text\" id=\"fornitore2\"></div>\
+            <div>Costo 2 <input type=\"text\" id=\"costo2\"></div>\
+            <div>IVA <input type=\"text\" id=\"iva\"></div>\
+            <input type=\"submit\" id=\"conferma\" value=\"Conferma aggiunta\"> `
+            let conferma = document.getElementById("conferma")
+            let codice = document.getElementById("codice")
+            let reparto_ = document.getElementById("reparto")
+            let tipoProdotto_ = document.getElementById("tipoProdotto")
+            let marca_ = document.getElementById("marca")
+            let modelloNome_ = document.getElementById("modello")
+            let qt_ = document.getElementById("qt")
+            let prezzo_ = document.getElementById("prezzo")
+            let nominativoResp = document.getElementById("nominativoResp")
+            let cellResp_ = document.getElementById("cellResp")
+            let fornitore1_ = document.getElementById("fornitore1")
+            let fornitore2_ = document.getElementById("fornitore2")
+            let costo1_ = document.getElementById("costo1")
+            let costo2_ = document.getElementById("costo2")
+            let iva_ = document.getElementById("iva")
+
+            lista_reparti.forEach(rep => {
+                createOption(rep, reparto_)
+            })
+
+            function isInteger(str) {
+                const num = parseInt(str, 10);
+                return !isNaN(num) && num.toString() === str;
+            }
+
+            function isFloat(str) {
+                const num = parseFloat(str, 10);
+                return !isNaN(num) && num.toString() === str;
+            }
+
+            conferma.addEventListener("click", function (e) {
+                e.preventDefault()
+
+                console.log(iva_.value)
+
+                if (codice.value == "" || reparto_.value == "" || tipoProdotto_.value == "" ||
+                    marca_.value == "" || modelloNome_.value == "" || (qt_.value == "" || !isInteger(qt_.value)) ||
+                    (prezzo_.value == "" || !isFloat(prezzo_.value)) || nominativoResp.value == "" || cellResp_.value == "" ||
+                    fornitore1_.value == "" || (costo1_.value == "" || !isFloat(costo1_.value)) ||
+                    (fornitore2_.value == "" && costo2_.value != "" || fornitore2_.value != "" && costo2_.value == "" || fornitore2_.value != "" && costo2_.value != "" && !isFloat(costo2_.value)) ||
+                    (iva_.value == "" || !isFloat(iva_.value))) {
+
+                    alert("controlla la corretteza degli input")
+                } else {
+                    let tempOgg = {}
+                    if (fornitore2_.value == "") {
+                        tempOgg = {
+                            codiceProd: codice.value,
+                            reparto: reparto_.value,
+                            tipoProdotto: tipoProdotto_.value,
+                            marca: marca_.value,
+                            modelloNome: modelloNome_.value,
+                            qt: parseInt(qt_.value),
+                            prezzo: parseFloat(prezzo_.value),
+                            nominativoResponsabile: nominativoResp.value,
+                            cellResp: cellResp_.value,
+                            fornitore1: fornitore1_.value,
+                            fornitore2: fornitore2_.value,
+                            costo1: parseFloat(costo1_.value),
+                            costo2: costo2_.value,
+                            iva: parseFloat(iva_.value)
+
+                        }
+                    } else {
+                        tempOgg = {
+                            codiceProd: codice.value,
+                            reparto: reparto_.value,
+                            tipoProdotto: tipoProdotto_.value,
+                            marca: marca_.value,
+                            modelloNome: modelloNome_.value,
+                            qt: parseInt(qt_.value),
+                            prezzo: parseFloat(prezzo_.value),
+                            nominativoResponsabile: nominativoResp.value,
+                            cellResp: cellResp_.value,
+                            fornitore1: fornitore1_.value,
+                            fornitore2: fornitore2_.value,
+                            costo1: parseFloat(costo1_.value),
+                            costo2: parseFloat(costo2_.value),
+                            iva: parseFloat(iva_.value)
+                        }
+                    }
+                    datiJson.push(tempOgg)
+                    console.log(datiJson)
+                    alert("elemento aggiunto")
+                }
+            })
+        })
+
+        function createOption(valore, select) {
+            select.insertAdjacentHTML("beforeend", `<option value="${valore}">${valore}</option>`)
+        }
 
         cerca.addEventListener("click", function (e) {
             e.defaultPrevented;
 
             div_messaggi.innerHTML = ""
+            campi.innerHTML = "";
             modifica = []
             rimuovi = []
             if (codice.value != "") {
@@ -64,23 +215,18 @@
             datiJson.forEach(element => {
                 if (codice.value == element.codiceProd) {
                     createRowTable(element)
-
                 } else if (codice.value == element.reparto) {
                     //console.log(element)
                     createRowTable(element)
-
                 } else if (codice.value == element.tipoProdotto) {
                     //console.log(element)
                     createRowTable(element)
-
                 } else if (codice.value == element.modelloNome) {
                     //console.log(element)
                     createRowTable(element)
-
                 } else if (codice.value == element.marca) {
                     //console.log(element)
                     createRowTable(element)
-
                 }
             });
         })
@@ -115,6 +261,23 @@
 
             console.log(lista_subTotali)
         });
+
+        function carica_reparti(lista_reparti, datiJson) {
+            datiJson.forEach(element => {
+                let trovato = false
+                lista_reparti.forEach(reparto => {
+                    if (reparto === element.reparto) {
+                        trovato = true
+                    }
+                })
+
+                if (!trovato) {
+                    lista_reparti.push(element.reparto)
+                }
+            })
+
+            console.log(lista_reparti)
+        }
 
         function createRowTable(element) {
             let ricerca = codice.value
