@@ -17,6 +17,7 @@
     <div id="dinamico"></div>
     <input type="submit" id="aggiungi" value="Aggiungi Prodotto">
     <input type="submit" id="aggiungiReparto" value="Aggiungi Reparto">
+    <input type="submit" id="salvaButton" value="Salva">
     <div id="campi"></div>
 
     <script>
@@ -34,6 +35,23 @@
         let campi = document.getElementById("campi")
         let lista_reparti = []
 
+
+        let conferma
+        let codice_
+        let reparto_
+        let tipoProdotto_
+        let marca_
+        let modelloNome_
+        let qt_
+        let prezzo_
+        let nominativoResp
+        let cellResp_
+        let fornitore1_
+        let fornitore2_
+        let costo1_
+        let costo2_
+        let iva_
+
         fetch(url)
             .then(response => response.json())
             .then(dati => {
@@ -44,7 +62,7 @@
 
         console.log(lista_reparti)
 
-        aggiungiReparto.addEventListener("click", function(e){
+        aggiungiReparto.addEventListener("click", function (e) {
             e.preventDefault();
             div_messaggi.innerHTML = "";
 
@@ -56,23 +74,36 @@
             conferma.addEventListener("click", function (e) {
                 e.preventDefault();
                 let esistente = false
-                lista_reparti.forEach(el =>{
-                    if(el === nome_reparto.value){
+                lista_reparti.forEach(el => {
+                    if (el === nome_reparto.value) {
                         alert("reparto già esistente")
                         esistente = true
                     }
                 })
 
-                if(!esistente){
+                if (!esistente) {
                     lista_reparti.push(nome_reparto.value)
+                    alert("Aggiungi un prodotto per questo reparto")
+                    aggiungi.click();
+                    reparto.value = nome_reparto.value
+                    document.getElementById("reparto").disabled = true;
                 }
 
                 console.log(lista_reparti)
             })
         })
 
-        aggiungi.addEventListener("click", function (e) {
-            e.preventDefault()
+        function isInteger(str) {
+            const num = parseInt(str, 10);
+            return !isNaN(num) && num.toString() === str;
+        }
+
+        function isFloat(str) {
+            const num = parseFloat(str, 10);
+            return !isNaN(num) && num.toString() === str;
+        }
+
+        function aggiungiForm() {
             div_messaggi.innerHTML = "";
 
             campi.innerHTML = `<div>Codice <input type=\"text\" id=\"codice\"></div>\
@@ -90,42 +121,39 @@
             <div>Costo 2 <input type=\"text\" id=\"costo2\"></div>\
             <div>IVA <input type=\"text\" id=\"iva\"></div>\
             <input type=\"submit\" id=\"conferma\" value=\"Conferma aggiunta\"> `
-            let conferma = document.getElementById("conferma")
-            let codice = document.getElementById("codice")
-            let reparto_ = document.getElementById("reparto")
-            let tipoProdotto_ = document.getElementById("tipoProdotto")
-            let marca_ = document.getElementById("marca")
-            let modelloNome_ = document.getElementById("modello")
-            let qt_ = document.getElementById("qt")
-            let prezzo_ = document.getElementById("prezzo")
-            let nominativoResp = document.getElementById("nominativoResp")
-            let cellResp_ = document.getElementById("cellResp")
-            let fornitore1_ = document.getElementById("fornitore1")
-            let fornitore2_ = document.getElementById("fornitore2")
-            let costo1_ = document.getElementById("costo1")
-            let costo2_ = document.getElementById("costo2")
-            let iva_ = document.getElementById("iva")
+            conferma = document.getElementById("conferma")
+            codice_ = document.getElementById("codice")
+            reparto_ = document.getElementById("reparto");
+            reparto_.disabled = false;
+            tipoProdotto_ = document.getElementById("tipoProdotto")
+            marca_ = document.getElementById("marca")
+            modelloNome_ = document.getElementById("modello")
+            qt_ = document.getElementById("qt")
+            prezzo_ = document.getElementById("prezzo")
+            nominativoResp = document.getElementById("nominativoResp")
+            cellResp_ = document.getElementById("cellResp")
+            fornitore1_ = document.getElementById("fornitore1")
+            fornitore2_ = document.getElementById("fornitore2")
+            costo1_ = document.getElementById("costo1")
+            costo2_ = document.getElementById("costo2")
+            iva_ = document.getElementById("iva")
+        }
+
+        aggiungi.addEventListener("click", function (e) {
+            e.preventDefault()
+
+            aggiungiForm();
 
             lista_reparti.forEach(rep => {
                 createOption(rep, reparto_)
             })
-
-            function isInteger(str) {
-                const num = parseInt(str, 10);
-                return !isNaN(num) && num.toString() === str;
-            }
-
-            function isFloat(str) {
-                const num = parseFloat(str, 10);
-                return !isNaN(num) && num.toString() === str;
-            }
 
             conferma.addEventListener("click", function (e) {
                 e.preventDefault()
 
                 console.log(iva_.value)
 
-                if (codice.value == "" || reparto_.value == "" || tipoProdotto_.value == "" ||
+                if (codice_.value == "" || reparto_.value == "" || tipoProdotto_.value == "" ||
                     marca_.value == "" || modelloNome_.value == "" || (qt_.value == "" || !isInteger(qt_.value)) ||
                     (prezzo_.value == "" || !isFloat(prezzo_.value)) || nominativoResp.value == "" || cellResp_.value == "" ||
                     fornitore1_.value == "" || (costo1_.value == "" || !isFloat(costo1_.value)) ||
@@ -137,7 +165,7 @@
                     let tempOgg = {}
                     if (fornitore2_.value == "") {
                         tempOgg = {
-                            codiceProd: codice.value,
+                            codiceProd: codice_.value,
                             reparto: reparto_.value,
                             tipoProdotto: tipoProdotto_.value,
                             marca: marca_.value,
@@ -147,15 +175,14 @@
                             nominativoResponsabile: nominativoResp.value,
                             cellResp: cellResp_.value,
                             fornitore1: fornitore1_.value,
-                            fornitore2: fornitore2_.value,
                             costo1: parseFloat(costo1_.value),
-                            costo2: costo2_.value,
+                            fornitore2: null,
+                            costo2: null,
                             iva: parseFloat(iva_.value)
-
                         }
                     } else {
                         tempOgg = {
-                            codiceProd: codice.value,
+                            codiceProd: codice_.value,
                             reparto: reparto_.value,
                             tipoProdotto: tipoProdotto_.value,
                             marca: marca_.value,
@@ -165,8 +192,8 @@
                             nominativoResponsabile: nominativoResp.value,
                             cellResp: cellResp_.value,
                             fornitore1: fornitore1_.value,
-                            fornitore2: fornitore2_.value,
                             costo1: parseFloat(costo1_.value),
+                            fornitore2: fornitore2_.value,
                             costo2: parseFloat(costo2_.value),
                             iva: parseFloat(iva_.value)
                         }
@@ -263,6 +290,7 @@
         });
 
         function carica_reparti(lista_reparti, datiJson) {
+            console.log(lista_reparti)
             datiJson.forEach(element => {
                 let trovato = false
                 lista_reparti.forEach(reparto => {
@@ -273,6 +301,7 @@
 
                 if (!trovato) {
                     lista_reparti.push(element.reparto)
+                    console.log(lista_reparti)
                 }
             })
 
@@ -312,8 +341,80 @@
             cellAzioni.appendChild(elimina);
 
             modifica.addEventListener("click", () => {
-                let conferma = confirm("Vuoi confermare la modifica dell'elemento?")
-                alert("modifica: " + element.codiceProd);
+                let conferma_ = confirm("Vuoi confermare la modifica dell'elemento?")
+                if (conferma_) {
+                    aggiungiForm()
+
+                    codice_.value = element.codiceProd
+                    reparto_.value = element.reparto
+                    reparto_.disabled = false;
+                    tipoProdotto_.value = element.tipoProdotto
+                    marca_.value = element.marca
+                    modelloNome_.value = element.modelloNome
+                    qt_.value = element.qt
+                    prezzo_.value = element.prezzo
+                    nominativoResp.value = element.nominativoResponsabile
+                    cellResp_.value = element.cellResp
+                    fornitore1_.value = element.fornitore1
+                    fornitore2_.value = element.fornitore2
+                    costo1_.value = element.costo1
+                    costo2_.value = element.costo2
+                    iva_.value = element.iva
+
+                    lista_reparti.forEach(rep => {
+                        createOption(rep, reparto_)
+                    })
+                    conferma.addEventListener("click", function (e) {
+                        e.preventDefault()
+                        if (codice_.value == "" || reparto_.value == "" || tipoProdotto_.value == "" ||
+                            marca_.value == "" || modelloNome_.value == "" || (qt_.value == "" || !isInteger(qt_.value)) ||
+                            (prezzo_.value == "" || !isFloat(prezzo_.value)) || nominativoResp.value == "" || cellResp_.value == "" ||
+                            fornitore1_.value == "" || (costo1_.value == "" || !isFloat(costo1_.value)) ||
+                            (fornitore2_.value == "" && costo2_.value != "" || fornitore2_.value != "" && costo2_.value == "" || fornitore2_.value != "" && costo2_.value != "" && !isFloat(costo2_.value)) ||
+                            (iva_.value == "" || !isFloat(iva_.value))) {
+
+                            alert("controlla la corretteza degli input")
+                        } else {
+                            if (fornitore2_.value == "") {
+                                element.codiceProd = codice_.value
+                                element.reparto = reparto_.value
+                                element.tipoProdotto = tipoProdotto_.value
+                                element.marca = marca_.value
+                                element.modelloNome = modelloNome_.value
+                                element.qt = parseInt(qt_.value)
+                                element.prezzo = parseFloat(prezzo_.value)
+                                element.nominativoResponsabile = nominativoResp.value
+                                element.cellResp = cellResp_.value
+                                element.fornitore1 = fornitore1_.value
+                                element.fornitore2 = fornitore2_.value
+                                element.costo1 = parseFloat(costo1_.value)
+                                element.costo2 = costo2_.value
+                                element.iva = parseFloat(iva_.value)
+                            } else {
+                                element.codiceProd = codice_.value
+                                element.reparto = reparto_.value
+                                element.tipoProdotto = tipoProdotto_.value
+                                element.marca = marca_.value
+                                element.modelloNome = modelloNome_.value
+                                element.qt = parseInt(qt_.value)
+                                element.prezzo = parseFloat(prezzo_.value)
+                                element.nominativoResponsabile = nominativoResp.value
+                                element.cellResp = cellResp_.value
+                                element.fornitore1 = fornitore1_.value
+                                element.fornitore2 = fornitore2_.value
+                                element.costo1 = parseFloat(costo1_.value)
+                                element.costo2 = parseFloat(costo2_.value)
+                                element.iva = parseFloat(iva_.value)
+                            }
+                            console.log(datiJson)
+                            alert("elemento modificato")
+                        }
+                        codice.value = ricerca
+                        cerca.click();
+                        alert("modifica: " + element.codiceProd);
+                    })
+                }
+
             });
 
             elimina.addEventListener("click", () => {
@@ -326,6 +427,38 @@
                 }
             });
         }
+
+        document.getElementById('salvaButton').addEventListener('click', () => {
+            //se sono stati letti dei dati corretti        
+            if (datiJson !== null) {
+
+                //pulisco area output
+                div_messaggi.innerHTML = '';
+
+                //creazione oggetto FILE
+                const jsonFile = new File([JSON.stringify(datiJson)], //array contenente il contenuto del file
+                    'modificato.json',  //nome file
+                    { type: 'application/json' });  //tipo file
+
+                // Crea un oggetto URL per il File
+                const fileUrl = URL.createObjectURL(jsonFile);
+
+                // Crea un elemento <a> nascosto per fare il download
+                const link = document.createElement('a');
+                link.href = fileUrl;
+                link.download = jsonFile.name; //specifica che il link deve fare un download
+
+
+                // Simulare un clic sul link per avviare il download e permettere di scegliere il nome del file
+                link.click();
+                // Elimina l'URL creato
+                URL.revokeObjectURL(fileUrl);
+
+                alert('File salvato');
+            } else {
+                alert('Dati non corretti o nulli.');
+            }
+        });
     </script>
 </body>
 
