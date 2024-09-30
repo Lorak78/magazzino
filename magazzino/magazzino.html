@@ -223,9 +223,9 @@
             campi.innerHTML = "";
             modifica = []
             rimuovi = []
-            if (codice.value != "") {
-                div_messaggi.innerHTML =
-                    `<table id="dati">
+
+            div_messaggi.innerHTML =
+                `<table id="dati">
                         <tr>
                             <th>Codice</th>
                             <th>Reparto</th>
@@ -244,25 +244,32 @@
                             <th>Azioni</th>
                         </tr>
                     </table>`
-            }
 
-            datiJson.forEach(element => {
-                if (codice.value == element.codiceProd) {
+
+            if (codice.value != "") {
+
+                datiJson.forEach(element => {
+                    if (codice.value == element.codiceProd) {
+                        createRowTable(element)
+                    } else if (codice.value == element.reparto) {
+                        //console.log(element)
+                        createRowTable(element)
+                    } else if (codice.value == element.tipoProdotto) {
+                        //console.log(element)
+                        createRowTable(element)
+                    } else if (codice.value == element.modelloNome) {
+                        //console.log(element)
+                        createRowTable(element)
+                    } else if (codice.value == element.marca) {
+                        //console.log(element)
+                        createRowTable(element)
+                    }
+                });
+            }else{
+                datiJson.forEach(element =>{
                     createRowTable(element)
-                } else if (codice.value == element.reparto) {
-                    //console.log(element)
-                    createRowTable(element)
-                } else if (codice.value == element.tipoProdotto) {
-                    //console.log(element)
-                    createRowTable(element)
-                } else if (codice.value == element.modelloNome) {
-                    //console.log(element)
-                    createRowTable(element)
-                } else if (codice.value == element.marca) {
-                    //console.log(element)
-                    createRowTable(element)
-                }
-            });
+                })
+            }
         })
 
         subTotale.addEventListener("click", () => {
@@ -386,7 +393,7 @@
                     })
                     conferma.addEventListener("click", function (e) {
                         e.preventDefault()
-                        if (!caricaCodice(codice_.value) || codice_.value == "" || reparto_.value == "" || tipoProdotto_.value == "" ||
+                        if (!caricaCodice(codice_.value) && element.codiceProd != codice_.value || codice_.value == "" || reparto_.value == "" || tipoProdotto_.value == "" ||
                             marca_.value == "" || modelloNome_.value == "" || (qt_.value == "" || !isInteger(qt_.value)) ||
                             (prezzo_.value == "" || !isFloat(prezzo_.value)) || nominativoResp.value == "" || cellResp_.value == "" ||
                             fornitore1_.value == "" || (costo1_.value == "" || !isFloat(costo1_.value)) ||
