@@ -1,6 +1,6 @@
 h1{
     text-align: center;
-    color: red;
+    color: rgb(56, 58, 58);
 }
 
 .input_dati{
@@ -24,8 +24,8 @@ table {
 }
 
 th {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #008cff;
+    color: rgb(255, 255, 255);
     padding: 5px;
     text-align: center;
 }
@@ -43,8 +43,8 @@ tr {
 
 input {
     text-align: center;
-    background-color: #bad844;
-    color: white;
+    background-color: #ddd;
+    color: black;
     border: none;
     padding: 4px 8px;
     text-align: center;
@@ -57,9 +57,13 @@ input {
     transition: background-color 0.3s ease;
 }
 
+#dinamico{
+    text-align: center;
+}
+
 input[type="submit"]{
     text-align: center;
-    background-color: #d8984e;
+    background-color: #2499d4;
     color: white;
     border: none;
     padding: 4px 8px;
@@ -75,7 +79,7 @@ input[type="submit"]{
 
 button{
     text-align: center;
-    background-color: #d8984e;
+    background-color: #2499d4;
     color: white;
     border: none;
     padding: 4px 8px;
