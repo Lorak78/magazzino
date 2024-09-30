@@ -153,7 +153,7 @@
 
                 console.log(iva_.value)
 
-                if (codice_.value == "" || reparto_.value == "" || tipoProdotto_.value == "" ||
+                if (!caricaCodice(codice_.value) || codice_.value == "" || reparto_.value == "" || tipoProdotto_.value == "" ||
                     marca_.value == "" || modelloNome_.value == "" || (qt_.value == "" || !isInteger(qt_.value)) ||
                     (prezzo_.value == "" || !isFloat(prezzo_.value)) || nominativoResp.value == "" || cellResp_.value == "" ||
                     fornitore1_.value == "" || (costo1_.value == "" || !isFloat(costo1_.value)) ||
@@ -261,7 +261,8 @@
         subTotale.addEventListener("click", () => {
             let lista_subTotali = []
 
-            div_messaggi.innerHTML = ""
+            div_messaggi.innerHTML = "";
+            campi.innerHTML = "";
 
             datiJson.forEach(element => {
                 let esiste = lista_subTotali.some(function (obj) {
@@ -308,6 +309,17 @@
             console.log(lista_reparti)
         }
 
+        function caricaCodice(codice) {
+            let diverso = true
+            datiJson.forEach(el => {
+                if (el.codiceProd == codice) {
+                    diverso = false
+                }
+            })
+
+            return diverso
+        }
+
         function createRowTable(element) {
             let ricerca = codice.value
             let tabella = document.getElementById("dati");
@@ -345,6 +357,7 @@
                 if (conferma_) {
                     aggiungiForm()
 
+
                     codice_.value = element.codiceProd
                     reparto_.value = element.reparto
                     reparto_.disabled = false;
@@ -366,16 +379,17 @@
                     })
                     conferma.addEventListener("click", function (e) {
                         e.preventDefault()
-                        if (codice_.value == "" || reparto_.value == "" || tipoProdotto_.value == "" ||
+                        if (!caricaCodice(codice_.value) || codice_.value == "" || reparto_.value == "" || tipoProdotto_.value == "" ||
                             marca_.value == "" || modelloNome_.value == "" || (qt_.value == "" || !isInteger(qt_.value)) ||
                             (prezzo_.value == "" || !isFloat(prezzo_.value)) || nominativoResp.value == "" || cellResp_.value == "" ||
                             fornitore1_.value == "" || (costo1_.value == "" || !isFloat(costo1_.value)) ||
                             (fornitore2_.value == "" && costo2_.value != "" || fornitore2_.value != "" && costo2_.value == "" || fornitore2_.value != "" && costo2_.value != "" && !isFloat(costo2_.value)) ||
                             (iva_.value == "" || !isFloat(iva_.value))) {
 
-                            alert("controlla la corretteza degli input")
+                            alert("controlla la corretteza degli input oppure il codice è già presente")
                         } else {
                             if (fornitore2_.value == "") {
+
                                 element.codiceProd = codice_.value
                                 element.reparto = reparto_.value
                                 element.tipoProdotto = tipoProdotto_.value
@@ -408,10 +422,11 @@
                             }
                             console.log(datiJson)
                             alert("elemento modificato")
+                            codice.value = ricerca
+                            cerca.click();
+                            alert("modifica: " + element.codiceProd);
                         }
-                        codice.value = ricerca
-                        cerca.click();
-                        alert("modifica: " + element.codiceProd);
+
                     })
                 }
 
