@@ -6,18 +6,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="grafica.css">
-    <title>Document</title>
+    <title>AMASON NON NEL PRIME</title>
 </head>
 
 <body>
-    <input type="text" id="text">
-    <input type="submit" id="cerca" value="Cerca">
-    <button id="subTotale">subTotale</button>
+    <h1>AMASON NON NEL PRIME</h1>
+    <div class="input_dati">
+        <input type="text" id="text">
+        <input type="submit" id="cerca" value="Cerca">
+        <button id="subTotale">subTotale</button>
+    </div>
+
 
     <div id="dinamico"></div>
-    <input type="submit" id="aggiungi" value="Aggiungi Prodotto">
-    <input type="submit" id="aggiungiReparto" value="Aggiungi Reparto">
-    <input type="submit" id="salvaButton" value="Salva">
+    <div class="input_dati1">
+        <input type="submit" id="aggiungi" value="Aggiungi Prodotto">
+        <input type="submit" id="aggiungiReparto" value="Aggiungi Reparto">
+        <input type="submit" id="salvaButton" value="Salva">
+    </div>
+
     <div id="campi"></div>
 
     <script>
@@ -106,7 +113,7 @@
         function aggiungiForm() {
             div_messaggi.innerHTML = "";
 
-            campi.innerHTML = `<div>Codice <input type=\"text\" id=\"codice\"></div>\
+            campi.innerHTML = `<div class="dati_prodotto"> <div>Codice <input type=\"text\" id=\"codice\"></div>\
             <div>Reparto <select id="reparto"></select></div>\
             <div>Tipo prodotto <input type=\"text\" id=\"tipoProdotto\"></div>\
             <div>Marca <input type=\"text\" id=\"marca\"></div>\
@@ -120,7 +127,7 @@
             <div>Fornitore 2 <input type=\"text\" id=\"fornitore2\"></div>\
             <div>Costo 2 <input type=\"text\" id=\"costo2\"></div>\
             <div>IVA <input type=\"text\" id=\"iva\"></div>\
-            <input type=\"submit\" id=\"conferma\" value=\"Conferma aggiunta\"> `
+            <input type=\"submit\" id=\"conferma\" value=\"Conferma aggiunta\"> </div>`
             conferma = document.getElementById("conferma")
             codice_ = document.getElementById("codice")
             reparto_ = document.getElementById("reparto");

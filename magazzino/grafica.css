@@ -1,4 +1,21 @@
+h1{
+    text-align: center;
+    color: red;
+}
+
+.input_dati{
+    text-align: center;
+}
+.input_dati1{
+    text-align: center;
+}
+
+#campi{
+    text-align: center;
+}
+
 table {
+    
     width: 95%;
     border-collapse: collapse;
     font-family: Arial, sans-serif;
@@ -25,6 +42,7 @@ tr {
 }
 
 input {
+    text-align: center;
     background-color: #4CAF50;
     color: white;
     border: none;
@@ -40,6 +58,7 @@ input {
 }
 
 button{
+    text-align: center;
     background-color: #4CAF50;
     color: white;
     border: none;
